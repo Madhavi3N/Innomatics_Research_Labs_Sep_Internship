@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Popup</title>
+    <style>
+        /* Style your popup here */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(169, 142, 237);
+            padding: 20px;
+            border: 1px solid #120345;
+            z-index: 1000;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="popup" id="myPopup">
+
+        <h2>Email Validation</h2>
+
+        <div>
+            <label for="email">Email Address:</label><br>
+            <input type="text" id="email" name="email" placeholder="Enter email address"><br><br>
+            <input type="button" value="Validate Email" onclick="validateEmail()">
+            <input type="button" value="Clear email" onclick="clearemail()">
+            <div id="validation-result"></div>
+
+        </div>
+
+        <button onclick="closePopup()">Close</button>
+        
+    </div>
+
+    <script>
+        function OpenPopup() {
+            document.getElementById("myPopup").style.display = "block";
+        }
+
+        function validateEmail() {
+            var email = document.getElementById('email').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/validate-email', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById('validation-result').innerText = response.result_message;
+                }
+            };
+            xhr.send('email=' + encodeURIComponent(email));
+        }
+
+        function clearemail() {
+            document.getElementById('email').value = '';
+        }
+
+        function closePopup() {
+            document.getElementById("myPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
